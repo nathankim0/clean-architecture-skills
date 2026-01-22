@@ -1,0 +1,19 @@
+{
+  "name": "clean-architecture-skills",
+  "owner": {
+    "name": "Community",
+    "url": "https://github.com/anthropics/skills"
+  },
+  "metadata": {
+    "description": "클린 아키텍처 원칙에 따른 코드 리뷰 및 설계 가이드 스킬 모음",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "clean-architecture",
+      "source": "./plugins/clean-architecture",
+      "description": "클린 아키텍처 원칙에 따라 코드를 리뷰하고 설계 가이드를 제공합니다. 의존성 규칙, SOLID 원칙, 레이어 분리를 검토합니다.",
+      "version": "1.0.0"
+    }
+  ]
+}
