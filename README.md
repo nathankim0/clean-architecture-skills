@@ -1,14 +1,24 @@
 # Clean Architecture Skills for Claude Code
 
-A Claude Code skill that reviews code and provides design guidance based on Clean Architecture principles.
+A collection of Claude Code skills for code review and design guidance based on Clean Architecture principles and Kent Beck's refactoring philosophy.
 
-## Features
+## Skills
+
+### Clean Architecture
+Reviews code based on Robert C. Martin's Clean Architecture principles.
 
 - **Dependency Rule Check**: Verify source code dependencies point inward (toward higher-level policies)
 - **Layer Structure Analysis**: Review Entities, Use Cases, Interface Adapters, Infrastructure layers
 - **Crossing Boundaries**: Guide on how to cross layer boundaries using DIP
 - **SOLID Principles Review**: Check adherence to object-oriented design principles
-- **Language-Specific Examples**: TypeScript, Python, Java/Kotlin examples
+
+### Kent Beck Style
+Reviews code following Kent Beck's refactoring philosophy and simple design principles.
+
+- **Code Smells Detection**: Identify Bloaters, OO Abusers, Change Preventers, Dispensables, Couplers
+- **Refactoring Techniques**: Extract Method, Move Method, Replace Magic Number, etc.
+- **Simple Design Principles**: YAGNI, KISS, 4 Rules of Simple Design
+- **Intention-Revealing Code**: Naming guidelines, self-documenting code, constant extraction
 
 ## Installation
 
@@ -43,17 +53,25 @@ clean-architecture-skills/
 ├── .claude-plugin/
 │   └── marketplace.json          # Marketplace config
 ├── plugins/
-│   └── clean-architecture/
+│   ├── clean-architecture/
+│   │   ├── .claude-plugin/
+│   │   │   └── plugin.json       # Plugin metadata
+│   │   └── skills/
+│   │       └── clean-architecture/
+│   │           └── SKILL.md      # Skill definition
+│   └── kent-beck-style/
 │       ├── .claude-plugin/
 │       │   └── plugin.json       # Plugin metadata
 │       └── skills/
-│           └── clean-architecture/
+│           └── kent-beck-style/
 │               └── SKILL.md      # Skill definition
 ├── README.md
 └── LICENSE
 ```
 
 ## Usage
+
+### Clean Architecture
 
 ```bash
 # Review entire project architecture
@@ -64,6 +82,22 @@ Check dependencies in src/domain directory
 
 # Design new feature
 Design user authentication with clean architecture
+```
+
+### Kent Beck Style
+
+```bash
+# Review code for code smells
+Review this code for code smells and suggest refactorings
+
+# Refactoring guidance
+Help me refactor this long method
+
+# Simple design review
+Check if this code follows YAGNI and KISS principles
+
+# Naming and readability
+Improve the naming in this module
 ```
 
 ## Clean Architecture Overview
@@ -164,6 +198,15 @@ MIT License - Free to use, modify, and distribute.
 
 ## References
 
+### Clean Architecture
 - [The Clean Architecture - Robert C. Martin](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 - [Clean Architecture: A Craftsman's Guide to Software Structure and Design](https://www.amazon.com/Clean-Architecture-Craftsmans-Software-Structure/dp/0134494164)
+
+### Kent Beck Style
+- [Refactoring: Improving the Design of Existing Code - Martin Fowler (with Kent Beck)](https://refactoring.com/)
+- [Implementation Patterns - Kent Beck](https://www.amazon.com/Implementation-Patterns-Kent-Beck/dp/0321413091)
+- [Refactoring Catalog](https://refactoring.com/catalog/)
+- [Code Smells](https://refactoring.guru/refactoring/smells)
+
+### General
 - [Claude Code Plugin Marketplaces](https://code.claude.com/docs/en/plugin-marketplaces)

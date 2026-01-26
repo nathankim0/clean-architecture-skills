@@ -5,14 +5,20 @@
     "url": "https://github.com/anthropics/skills"
   },
   "metadata": {
-    "description": "클린 아키텍처 원칙에 따른 코드 리뷰 및 설계 가이드 스킬 모음",
-    "version": "1.0.0"
+    "description": "클린 아키텍처 원칙과 켄트 벡 스타일 리팩토링에 따른 코드 리뷰 및 설계 가이드 스킬 모음",
+    "version": "1.1.0"
   },
   "plugins": [
     {
       "name": "clean-architecture",
       "source": "./plugins/clean-architecture",
       "description": "클린 아키텍처 원칙에 따라 코드를 리뷰하고 설계 가이드를 제공합니다. 의존성 규칙, SOLID 원칙, 레이어 분리를 검토합니다.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "kent-beck-style",
+      "source": "./plugins/kent-beck-style",
+      "description": "켄트 벡의 리팩토링 철학과 단순 설계 원칙에 따라 코드를 리뷰하고 가이드를 제공합니다. 코드 냄새 감지, 리팩토링 기법, 점진적 개선을 다룹니다.",
       "version": "1.0.0"
     }
   ]
