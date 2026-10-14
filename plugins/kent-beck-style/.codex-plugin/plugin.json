@@ -1,0 +1,9 @@
+{
+  "name": "kent-beck-style",
+  "description": "Review and refactor code using Kent Beck's simple design principles, code smell detection, and incremental improvements.",
+  "version": "1.0.0",
+  "author": {
+    "name": "nathankim0"
+  },
+  "skills": "./skills/"
+}

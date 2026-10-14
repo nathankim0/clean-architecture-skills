@@ -1,0 +1,32 @@
+{
+  "name": "clean-architecture-skills",
+  "interface": {
+    "displayName": "Clean Architecture Skills"
+  },
+  "plugins": [
+    {
+      "name": "clean-architecture",
+      "source": {
+        "source": "local",
+        "path": "./plugins/clean-architecture"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "kent-beck-style",
+      "source": {
+        "source": "local",
+        "path": "./plugins/kent-beck-style"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

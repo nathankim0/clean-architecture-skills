@@ -4,7 +4,7 @@
 
 A collection of skills for AI coding agents that provide code review, architecture guidance, and refactoring suggestions based on **Clean Architecture** and **Kent Beck's simple design philosophy**.
 
-Designed primarily for **Claude Code**, with support for other AI coding assistants that use local skill directories.
+Supports **Claude Code** and **OpenAI Codex** with native plugin marketplaces. The same `SKILL.md` files also work with AI coding assistants that use local skill directories.
 
 ## What's Included
 
@@ -56,6 +56,20 @@ Then install the skills you want.
 
 You can install either skill independently or use both together.
 
+### OpenAI Codex
+
+Run these commands in your terminal to add the marketplace and install either or both plugins:
+
+```bash
+codex plugin marketplace add nathankim0/clean-architecture-skills
+codex plugin add clean-architecture@clean-architecture-skills
+codex plugin add kent-beck-style@clean-architecture-skills
+```
+
+Start a new Codex session after installation. You can also browse the configured marketplace with `/plugins` in Codex CLI.
+
+For the Codex IDE extension, or a Codex version without `codex plugin`, use manual installation below.
+
 ### Manual Installation
 
 Clone the repository:
@@ -64,7 +78,17 @@ Clone the repository:
 git clone https://github.com/nathankim0/clean-architecture-skills.git
 ```
 
-Then copy the desired skill into the skill directory used by your AI coding assistant.
+For Codex, copy either or both skill folders into your user skill directory:
+
+```bash
+mkdir -p ~/.agents/skills
+cp -R clean-architecture-skills/plugins/clean-architecture/skills/clean-architecture ~/.agents/skills/
+cp -R clean-architecture-skills/plugins/kent-beck-style/skills/kent-beck-style ~/.agents/skills/
+```
+
+To make the skills available only in one project, use that project's `.agents/skills/` directory instead of `~/.agents/skills/`. If the skills do not appear, restart Codex. Choose either plugin or manual installation to avoid duplicate skills.
+
+For other assistants, copy the same skill folders into the directory listed below.
 
 ### Other AI Assistants
 
@@ -79,6 +103,15 @@ Then copy the desired skill into the skill directory used by your AI coding assi
 ## Usage
 
 The skills are designed to work naturally from regular prompts.
+
+In Codex, select a skill with `/skills` or mention a marketplace plugin's skill explicitly:
+
+```text
+$clean-architecture:clean-architecture Review the dependencies in src/domain.
+$kent-beck-style:kent-beck-style Review this module for code smells and small refactorings.
+```
+
+For manual installations, use `$clean-architecture` and `$kent-beck-style` instead.
 
 ### Review an Entire Project
 
@@ -270,12 +303,18 @@ Clean Architecture is primarily about **dependency direction and separation of p
 
 ```text
 clean-architecture-skills/
+├── .agents/
+│   └── plugins/
+│       └── marketplace.json        # Codex marketplace
+│
 ├── .claude-plugin/
-│   └── marketplace.json
+│   └── marketplace.json            # Claude Code marketplace
 │
 ├── plugins/
 │   ├── clean-architecture/
 │   │   ├── .claude-plugin/
+│   │   │   └── plugin.json
+│   │   ├── .codex-plugin/
 │   │   │   └── plugin.json
 │   │   └── skills/
 │   │       └── clean-architecture/
@@ -283,6 +322,8 @@ clean-architecture-skills/
 │   │
 │   └── kent-beck-style/
 │       ├── .claude-plugin/
+│       │   └── plugin.json
+│       ├── .codex-plugin/
 │       │   └── plugin.json
 │       └── skills/
 │           └── kent-beck-style/
@@ -355,6 +396,11 @@ git push origin feature/amazing-feature
 ### Claude Code
 
 - [Claude Code Plugin Marketplaces](https://code.claude.com/docs/en/plugin-marketplaces)
+
+### OpenAI Codex
+
+- [OpenAI Codex Skills](https://developers.openai.com/codex/skills/)
+- [OpenAI Plugin Packaging and Marketplaces](https://developers.openai.com/plugins/build/plugins)
 
 ---
 
