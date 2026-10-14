@@ -2,6 +2,8 @@
 
 # Clean Architecture Skills
 
+[![한국어](https://img.shields.io/badge/%ED%95%9C%EA%B5%AD%EC%96%B4-0078D4?style=for-the-badge)](README.ko.md)
+
 A collection of skills for AI coding agents that provide code review, architecture guidance, and refactoring suggestions based on **Clean Architecture** and **Kent Beck's simple design philosophy**.
 
 Supports **Claude Code** and **OpenAI Codex** with native plugin marketplaces. The same `SKILL.md` files also work with AI coding assistants that use local skill directories.
@@ -172,27 +174,16 @@ The central rule of Clean Architecture is:
 
 > Source code dependencies must point inward, toward higher-level policies.
 
-```text
-┌─────────────────────────────────────────────────────────┐
-│                  Frameworks & Drivers                   │
-│                                                         │
-│  ┌─────────────────────────────────────────────────┐    │
-│  │              Interface Adapters                 │    │
-│  │                                                 │    │
-│  │  ┌─────────────────────────────────────────┐    │    │
-│  │  │                Use Cases                │    │    │
-│  │  │                                         │    │    │
-│  │  │  ┌─────────────────────────────────┐    │    │    │
-│  │  │  │            Entities             │    │    │    │
-│  │  │  │                                 │    │    │    │
-│  │  │  │   Enterprise Business Rules     │    │    │    │
-│  │  │  └─────────────────────────────────┘    │    │    │
-│  │  └─────────────────────────────────────────┘    │    │
-│  └─────────────────────────────────────────────────┘    │
-└─────────────────────────────────────────────────────────┘
-
-                     Dependencies flow inward →
+```mermaid
+flowchart LR
+    accTitle: Clean Architecture dependency direction
+    accDescr: Source code dependencies point inward from Frameworks and Drivers through Interface Adapters and Use Cases to Entities.
+    frameworks["Frameworks & Drivers<br/>Web, database, external services"] --> adapters["Interface Adapters<br/>Controllers, presenters, gateways"]
+    adapters --> usecases["Use Cases<br/>Application business rules"]
+    usecases --> entities["Entities<br/>Enterprise business rules"]
 ```
+
+Arrows show source-code dependencies from outer implementation details toward inner business rules. Dependencies may skip layers while keeping this direction.
 
 Business rules should not depend on databases, frameworks, UI libraries, or external APIs.
 
@@ -331,6 +322,7 @@ clean-architecture-skills/
 │               └── SKILL.md
 │
 ├── README.md
+├── README.ko.md
 └── LICENSE
 ```
 
