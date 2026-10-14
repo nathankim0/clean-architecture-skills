@@ -76,19 +76,22 @@ Clone the repository:
 
 ```bash
 git clone https://github.com/nathankim0/clean-architecture-skills.git
+cd clean-architecture-skills
 ```
 
-For Codex, copy either or both skill folders into your user skill directory:
+For Codex, symlink either or both skill folders into your user skill directory:
 
 ```bash
 mkdir -p ~/.agents/skills
-cp -R clean-architecture-skills/plugins/clean-architecture/skills/clean-architecture ~/.agents/skills/
-cp -R clean-architecture-skills/plugins/kent-beck-style/skills/kent-beck-style ~/.agents/skills/
+ln -s "$PWD/plugins/clean-architecture/skills/clean-architecture" ~/.agents/skills/
+ln -s "$PWD/plugins/kent-beck-style/skills/kent-beck-style" ~/.agents/skills/
 ```
 
 To make the skills available only in one project, use that project's `.agents/skills/` directory instead of `~/.agents/skills/`. If the skills do not appear, restart Codex. Choose either plugin or manual installation to avoid duplicate skills.
 
-For other assistants, copy the same skill folders into the directory listed below.
+Run `git pull` in this clone to update linked skills. Keep the clone at the same path so the links remain valid. If you previously copied a skill, move that installed folder aside before creating its link.
+
+For other assistants, link or copy the same skill folders into the directory listed below.
 
 ### Other AI Assistants
 
@@ -104,14 +107,12 @@ For other assistants, copy the same skill folders into the directory listed belo
 
 The skills are designed to work naturally from regular prompts.
 
-In Codex, select a skill with `/skills` or mention a marketplace plugin's skill explicitly:
+In Codex, select a skill with `/skills` or mention it explicitly:
 
 ```text
 $clean-architecture:clean-architecture Review the dependencies in src/domain.
 $kent-beck-style:kent-beck-style Review this module for code smells and small refactorings.
 ```
-
-For manual installations, use `$clean-architecture` and `$kent-beck-style` instead.
 
 ### Review an Entire Project
 
@@ -313,7 +314,7 @@ clean-architecture-skills/
 ├── plugins/
 │   ├── clean-architecture/
 │   │   ├── .claude-plugin/
-│   │   │   └── plugin.json
+│   │   │   └── plugin.json -> ../.codex-plugin/plugin.json
 │   │   ├── .codex-plugin/
 │   │   │   └── plugin.json
 │   │   └── skills/
@@ -322,7 +323,7 @@ clean-architecture-skills/
 │   │
 │   └── kent-beck-style/
 │       ├── .claude-plugin/
-│       │   └── plugin.json
+│       │   └── plugin.json -> ../.codex-plugin/plugin.json
 │       ├── .codex-plugin/
 │       │   └── plugin.json
 │       └── skills/
@@ -332,6 +333,8 @@ clean-architecture-skills/
 ├── README.md
 └── LICENSE
 ```
+
+Edit each plugin's `.codex-plugin/plugin.json` to update its shared metadata; Claude Code reads the same file through a relative symlink. Codex requires the manifest to be a regular file. Both hosts use the same skill instructions under `skills/`. Marketplace catalogs remain separate because their schemas differ.
 
 ---
 
