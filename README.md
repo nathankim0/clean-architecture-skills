@@ -201,18 +201,21 @@ OpenClaw also discovers `~/.agents/skills/` with its default state directory. Fo
 
 ## The approach
 
+### Dependencies point inward
+
 **Keep business rules independent.** Source-code dependencies point inward, toward higher-level policies:
 
-```mermaid
-flowchart LR
-    accTitle: Clean Architecture dependency direction
-    accDescr: Source-code dependencies point inward from Frameworks and Drivers through Interface Adapters and Use Cases to Entities.
-    frameworks["Frameworks & Drivers"] --> adapters["Interface Adapters"]
-    adapters --> usecases["Use Cases"]
-    usecases --> entities["Entities"]
-```
+![Clean Architecture: four concentric layers with dependencies pointing inward. DIP: the use case uses an inner repository port, and an outer DB adapter implements that port; both code dependencies point to the port.](docs/images/clean-architecture.png)
 
-Dependencies can skip layers while keeping this direction. Folder names alone do not determine the architecture.
+The circles show nested boundaries. Arrows represent source-code dependencies, not execution order. Dependencies can skip layers while keeping this direction. Neither a circular drawing nor exactly four layers is required; the dependency rule is. See [Robert C. Martin's original explanation](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html).
+
+### Dependency inversion (DIP)
+
+**High-level policies and low-level details depend on abstractions; those abstractions do not depend on implementation details.** As shown on the right of the image, define the port (interface) in the inner layer that needs it, and make the outer adapter implement it.
+
+For example, `GetUserUseCase` references only `UserRepository`; the outer `PostgresUserRepository` implements that port. At runtime, the use case calls the supplied implementation through the port. This is how calls can go outward while source-code dependencies stay inward. Dependency injection (DI) supplies the implementation; injection alone does not satisfy DIP if the use case still depends on the concrete class.
+
+### Small refactorings
 
 **Improve code in small steps.** Follow Kent Beck's simple design priorities: pass the tests, reveal intention, avoid duplication, and keep unnecessary elements out. Use abstractions when they solve a real problem.
 
