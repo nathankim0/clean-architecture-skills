@@ -93,15 +93,19 @@ class OrderPresenter implements OrderOutputPort {
 ```typescript
 // Bad: Passing Entity directly
 class GetUserUseCase {
-  execute(): User { // Returning Entity directly
+  constructor(private userRepository: UserRepository) {}
+  execute(id: string): Promise<User> { // Returning Entity directly
     return this.userRepository.findById(id);
   }
 }
+```
 
+```typescript
 // Good: Transform to DTO
 class GetUserUseCase {
-  execute(): UserResponseDTO { // Simple data structure
-    const user = this.userRepository.findById(id);
+  constructor(private userRepository: UserRepository) {}
+  async execute(id: string): Promise<UserResponseDTO> {
+    const user = await this.userRepository.findById(id);
     return { id: user.id, name: user.name };
   }
 }
@@ -110,19 +114,19 @@ class GetUserUseCase {
 Checklist:
 - Are Entities or Database Rows not crossing boundaries directly?
 - Are external framework data formats not penetrating inner layers?
-- Are appropriate DTOs defined for each layer?
+- Do boundary data structures serve the inner layer without adding redundant DTOs for every layer?
 
 ### 3. Layer Structure Review
 
 #### Entities (Domain Layer)
 - Contains core business rules
-- No external dependencies
+- Independent of outer-layer frameworks, persistence, and UI
 - Least likely to change
 
 Checklist:
 - Does Entity avoid depending on frameworks?
 - Does it contain only pure business logic?
-- Are there no external library imports?
+- Do imported libraries preserve domain independence rather than introduce infrastructure concerns?
 
 #### Use Cases (Application Layer)
 - Application-specific business rules
@@ -149,8 +153,8 @@ Checklist:
 - Most likely to change
 
 Checklist:
-- Are framework dependencies isolated to this layer?
-- Are Repository implementations located here?
+- Are framework and database details kept out of Entities and Use Cases?
+- Do Repository implementations depend inward on ports, whether placed in Adapters or Infrastructure?
 
 ### 4. SOLID Principles Review
 
@@ -202,7 +206,7 @@ Provide review results in this format:
 ### Common Pitfalls to Avoid
 
 1. **Over-obsession with layers**: Layer separation is not the goal itself
-2. **Over-abstraction**: Creating interfaces with only one implementation
+2. **Over-abstraction**: Adding interfaces without a useful boundary; one implementation is enough when a port isolates business rules from infrastructure
 3. **Superficial adoption**: Relying on IDE refactoring while ignoring actual dependency rules
 4. **Over-engineering for the future**: Adding complexity for unlikely changes
 
@@ -217,7 +221,7 @@ Always consider these questions during review:
 
 Ask yourself if you're really benefiting from Clean Architecture:
 - Is it the layer separation that helps, or just IDE auto-refactoring?
-- Is a Repository interface with only one implementation really necessary?
+- Does this Repository interface isolate business rules from infrastructure, regardless of implementation count?
 - Are you over-abstracting for a 0.001% chance of future change?
 - Can you rename a class in outer modules without affecting inner modules?
 

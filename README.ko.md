@@ -101,7 +101,7 @@ ln -s "$PWD/plugins/kent-beck-style/skills/kent-beck-style" ~/.agents/skills/
 |---|---|
 | **Cursor** | `.cursor/skills/` |
 | **Gemini CLI** | `~/.gemini/skills/` |
-| **OpenCode** | `~/.opencode/skills/` |
+| **OpenCode** | `~/.config/opencode/skills/` |
 
 ---
 
@@ -295,6 +295,8 @@ src/
 
 ```text
 clean-architecture-skills/
+├── .github/workflows/validate.yml   # Linux와 Windows 검증
+│
 ├── .agents/
 │   └── plugins/
 │       └── marketplace.json        # Codex 마켓플레이스
@@ -305,7 +307,7 @@ clean-architecture-skills/
 ├── plugins/
 │   ├── clean-architecture/
 │   │   ├── .claude-plugin/
-│   │   │   └── plugin.json -> ../.codex-plugin/plugin.json
+│   │   │   └── plugin.json
 │   │   ├── .codex-plugin/
 │   │   │   └── plugin.json
 │   │   └── skills/
@@ -314,19 +316,22 @@ clean-architecture-skills/
 │   │
 │   └── kent-beck-style/
 │       ├── .claude-plugin/
-│       │   └── plugin.json -> ../.codex-plugin/plugin.json
+│       │   └── plugin.json
 │       ├── .codex-plugin/
 │       │   └── plugin.json
 │       └── skills/
 │           └── kent-beck-style/
 │               └── SKILL.md
 │
+├── tests/validation.test.mjs        # 메타데이터와 실행 가능한 예제 검증
 ├── README.md
 ├── README.ko.md
 └── LICENSE
 ```
 
-공통 메타데이터는 각 플러그인의 `.codex-plugin/plugin.json`에서 수정합니다. Claude Code는 상대 심볼릭 링크를 통해 같은 파일을 읽습니다. Codex가 매니페스트를 읽을 수 있도록 원본은 일반 파일로 유지합니다. 두 도구는 `skills/` 아래의 같은 스킬 지침을 사용합니다. 마켓플레이스 목록은 형식이 달라 각각 유지합니다.
+각 플러그인의 `.claude-plugin/plugin.json`과 `.codex-plugin/plugin.json`을 동일하게 유지합니다. Git의 심볼릭 링크가 비활성화된 환경에서도 설치할 수 있도록 두 파일 모두 일반 JSON 파일로 배포합니다. 두 도구는 `skills/` 아래의 같은 스킬 지침을 사용합니다. 마켓플레이스 목록은 형식이 달라 각각 유지합니다.
+
+Node.js 24 이상에서 `node --test`를 실행하면 매니페스트의 일치 여부와 실행 가능한 스킬 예제를 검증합니다. GitHub Actions에서도 Linux와 Windows 환경에서 같은 검사를 실행합니다.
 
 ---
 

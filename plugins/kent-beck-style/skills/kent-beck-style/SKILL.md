@@ -140,12 +140,12 @@ function createUser(
 Improper application of OO principles.
 
 #### Switch Statements
-- Complex switch/case or if/else chains
-- Often indicates missing polymorphism
+- Repeated type-based switch/case or if/else chains can justify polymorphism
+- Keep a short, exhaustive switch when the cases are a closed set and it is easier to understand
 - **Refactoring**: Replace Conditional with Polymorphism, Replace Type Code with Subclasses
 
 ```typescript
-// Bad: Switch statement
+// Before: A type-based branch; keep it if it is already clear
 function calculateArea(shape: Shape): number {
   switch (shape.type) {
     case 'circle':
@@ -157,7 +157,7 @@ function calculateArea(shape: Shape): number {
   }
 }
 
-// Good: Polymorphism
+// Alternative: Polymorphism when repeated branches need independent extension
 interface Shape {
   calculateArea(): number;
 }
@@ -361,25 +361,6 @@ When a class isn't doing much.
 
 ### Organizing Data
 
-#### Replace Magic Number with Symbolic Constant
-Always name your constants!
-
-```typescript
-// Bad: Magic numbers
-if (age >= 18) { ... }
-const tax = price * 0.1;
-setTimeout(callback, 86400000);
-
-// Good: Named constants
-const LEGAL_ADULT_AGE = 18;
-const TAX_RATE = 0.1;
-const MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000;
-
-if (age >= LEGAL_ADULT_AGE) { ... }
-const tax = price * TAX_RATE;
-setTimeout(callback, MILLISECONDS_PER_DAY);
-```
-
 #### Encapsulate Field
 Make fields private, provide accessors.
 
@@ -472,7 +453,7 @@ Pass the object instead of extracting values.
 
 ### Magic Numbers and Literals
 
-**Always replace magic numbers with named constants.**
+Name non-obvious literals and business rules. Reuse existing platform or domain constants; keep conventional literals inline when their meaning is already clear.
 
 ```typescript
 // Bad
@@ -519,16 +500,21 @@ Code should express its intent without comments.
 if (user.subscription !== null &&
     user.subscription.endDate > new Date() &&
     user.subscription.tier === 'premium') { ... }
+```
 
+```typescript
 // Good: Self-documenting
-if (user.hasPremiumAccess()) { ... }
-
 class User {
+  constructor(private subscription: { endDate: Date; tier: string } | null) {}
+
   hasPremiumAccess(): boolean {
-    return this.subscription?.isActive() &&
-           this.subscription?.tier === SubscriptionTier.PREMIUM;
+    return this.subscription !== null &&
+           this.subscription.endDate > new Date() &&
+           this.subscription.tier === 'premium';
   }
 }
+
+// Call user.hasPremiumAccess() from the condition.
 ```
 
 ## Working in Small Steps
@@ -546,34 +532,6 @@ class User {
 - Keep the code working at all times
 - If tests fail, revert and try smaller steps
 - Commit frequently
-
-### Example: Extract Method in Small Steps
-
-```typescript
-// Step 1: Identify code to extract
-function printOwing() {
-  printBanner();
-
-  // START: Code to extract
-  console.log(`name: ${name}`);
-  console.log(`amount: ${getOutstanding()}`);
-  // END: Code to extract
-}
-
-// Step 2: Create new method with extracted code
-function printDetails() {
-  console.log(`name: ${name}`);
-  console.log(`amount: ${getOutstanding()}`);
-}
-
-// Step 3: Call new method from original location
-function printOwing() {
-  printBanner();
-  printDetails();
-}
-
-// Step 4: Run tests, commit
-```
 
 ## Output Format
 
@@ -616,18 +574,22 @@ Provide review results in this format:
 ```typescript
 // Code Smell: Primitive Obsession + Magic Numbers
 function createDiscount(percent: number, startDate: string, endDate: string) {
-  if (percent < 0 || percent > 100) throw new Error('Invalid');
+  if (!Number.isFinite(percent) || percent < 0 || percent > 100) {
+    throw new RangeError('Discount percent must be between 0 and 100');
+  }
   // ...
 }
+```
 
+```typescript
 // Refactored
 const MIN_DISCOUNT_PERCENT = 0;
 const MAX_DISCOUNT_PERCENT = 100;
 
 class DiscountPercent {
   constructor(private value: number) {
-    if (value < MIN_DISCOUNT_PERCENT || value > MAX_DISCOUNT_PERCENT) {
-      throw new InvalidDiscountError(value);
+    if (!Number.isFinite(value) || value < MIN_DISCOUNT_PERCENT || value > MAX_DISCOUNT_PERCENT) {
+      throw new RangeError('Discount percent must be between 0 and 100');
     }
   }
 }
@@ -637,11 +599,13 @@ class DateRange {
     private start: Date,
     private end: Date
   ) {
-    if (start > end) throw new InvalidDateRangeError();
+    if (!Number.isFinite(start.getTime()) || !Number.isFinite(end.getTime()) || start > end) {
+      throw new RangeError('Expected valid dates with start <= end');
+    }
   }
 }
 
-function createDiscount(percent: DiscountPercent, period: DateRange) { ... }
+function createDiscount(percent: DiscountPercent, period: DateRange) { /* ... */ }
 ```
 
 ### Python

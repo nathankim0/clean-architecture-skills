@@ -101,7 +101,7 @@ For other assistants, link or copy the same skill folders into the directory lis
 |---|---|
 | **Cursor** | `.cursor/skills/` |
 | **Gemini CLI** | `~/.gemini/skills/` |
-| **OpenCode** | `~/.opencode/skills/` |
+| **OpenCode** | `~/.config/opencode/skills/` |
 
 ---
 
@@ -295,6 +295,8 @@ Clean Architecture is primarily about **dependency direction and separation of p
 
 ```text
 clean-architecture-skills/
+├── .github/workflows/validate.yml   # Linux and Windows checks
+│
 ├── .agents/
 │   └── plugins/
 │       └── marketplace.json        # Codex marketplace
@@ -305,7 +307,7 @@ clean-architecture-skills/
 ├── plugins/
 │   ├── clean-architecture/
 │   │   ├── .claude-plugin/
-│   │   │   └── plugin.json -> ../.codex-plugin/plugin.json
+│   │   │   └── plugin.json
 │   │   ├── .codex-plugin/
 │   │   │   └── plugin.json
 │   │   └── skills/
@@ -314,19 +316,22 @@ clean-architecture-skills/
 │   │
 │   └── kent-beck-style/
 │       ├── .claude-plugin/
-│       │   └── plugin.json -> ../.codex-plugin/plugin.json
+│       │   └── plugin.json
 │       ├── .codex-plugin/
 │       │   └── plugin.json
 │       └── skills/
 │           └── kent-beck-style/
 │               └── SKILL.md
 │
+├── tests/validation.test.mjs        # Metadata and executable example checks
 ├── README.md
 ├── README.ko.md
 └── LICENSE
 ```
 
-Edit each plugin's `.codex-plugin/plugin.json` to update its shared metadata; Claude Code reads the same file through a relative symlink. Codex requires the manifest to be a regular file. Both hosts use the same skill instructions under `skills/`. Marketplace catalogs remain separate because their schemas differ.
+Keep each plugin's `.claude-plugin/plugin.json` and `.codex-plugin/plugin.json` identical. Both are regular JSON files so installation also works when Git symlinks are disabled. Both hosts use the same skill instructions under `skills/`. Marketplace catalogs remain separate because their schemas differ.
+
+Run `node --test` with Node.js 24 or later to check manifest consistency and the executable skill examples. GitHub Actions runs these checks on Linux and Windows.
 
 ---
 
