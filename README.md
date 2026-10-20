@@ -1,68 +1,45 @@
-<img width="2171" height="724" alt="Clean Architecture Skills" src="https://github.com/user-attachments/assets/e0b26116-97c8-4062-b323-ad7239f66006" />
+<div align="center">
+
+<img width="2171" height="724" alt="Clean Architecture Skills — architecture review and refactoring guidance for AI coding agents" src="https://github.com/user-attachments/assets/e0b26116-97c8-4062-b323-ad7239f66006" />
 
 # Clean Architecture Skills
 
-[![한국어](https://img.shields.io/badge/%ED%95%9C%EA%B5%AD%EC%96%B4-0078D4?style=for-the-badge)](README.ko.md)
+**Clear boundaries. Simple code.**
 
-A collection of skills for AI coding agents that provide code review, architecture guidance, and refactoring suggestions based on **Clean Architecture** and **Kent Beck's simple design philosophy**.
+Two skills for AI coding agents: review architecture, spot code smells, and improve code in small steps.
 
-Supports **Claude Code** and **OpenAI Codex** with native plugin marketplaces, **pi** as a Git package, and **OpenClaw** through its skill installer. The same `SKILL.md` files also work with AI coding assistants that use local skill directories.
+[![Release](https://img.shields.io/github/v/release/nathankim0/clean-architecture-skills?style=flat-square&color=2563eb)](https://github.com/nathankim0/clean-architecture-skills/releases) [![Validation](https://img.shields.io/github/actions/workflow/status/nathankim0/clean-architecture-skills/validate.yml?branch=main&label=checks&style=flat-square)](https://github.com/nathankim0/clean-architecture-skills/actions/workflows/validate.yml) [![License: MIT](https://img.shields.io/badge/license-MIT-2563eb?style=flat-square)](LICENSE)
 
-**GitHub Copilot** and **Amp** can install both skills with GitHub CLI or discover them in a shared Agent Skills directory.
+English · [한국어](README.ko.md)
 
-## What's Included
+[Skills](#skills) · [Quick start](#quick-start) · [Usage](#usage) · [Supported agents](#supported-agents) · [Contributing](#contributing)
 
-### Clean Architecture
+</div>
 
-Reviews and guides code using Robert C. Martin's Clean Architecture principles.
+## Skills
 
-- **Dependency Rule** — Detect dependencies that point in the wrong direction
-- **Layer Boundaries** — Review Entities, Use Cases, Interface Adapters, and Infrastructure
-- **Dependency Inversion** — Guide communication across architectural boundaries
-- **SOLID Principles** — Review SRP, OCP, LSP, ISP, and DIP
-- **Architecture Design** — Help design new features without coupling business rules to frameworks
+| Skill | What it helps with |
+| --- | --- |
+| **[Clean Architecture](plugins/clean-architecture/skills/clean-architecture/SKILL.md)** | Review dependency direction, layer boundaries, and SOLID. Keep business rules independent of infrastructure. |
+| **[Kent Beck Style](plugins/kent-beck-style/skills/kent-beck-style/SKILL.md)** | Find code smells, clarify names, and simplify code through small, behavior-preserving refactorings. |
 
-### Kent Beck Style
+Use either skill independently, or combine them to review the design and then simplify the implementation. Each is a portable `SKILL.md` file; the same instructions are shared across agents.
 
-Reviews code using Kent Beck's refactoring philosophy and simple design principles.
-
-- **Code Smells** — Detect structural and readability problems
-- **Refactoring** — Suggest small, behavior-preserving improvements
-- **Simple Design** — Apply YAGNI, KISS, and the 4 Rules of Simple Design
-- **Intention-Revealing Code** — Improve naming and make code easier to understand
-- **Incremental Improvement** — Prefer small, safe changes over large rewrites
-
----
-
-## Installation
+## Quick start
 
 ### Claude Code
 
-Add this repository as a plugin marketplace:
+Run inside Claude Code. Install either plugin or both:
 
-```bash
+```text
 /plugin marketplace add nathankim0/clean-architecture-skills
-```
-
-Then install the skills you want.
-
-#### Clean Architecture
-
-```bash
 /plugin install clean-architecture@clean-architecture-skills
-```
-
-#### Kent Beck Style
-
-```bash
 /plugin install kent-beck-style@clean-architecture-skills
 ```
 
-You can install either skill independently or use both together.
-
 ### OpenAI Codex
 
-Run these commands in your terminal to add the marketplace and install either or both plugins:
+Run in your terminal:
 
 ```bash
 codex plugin marketplace add nathankim0/clean-architecture-skills
@@ -70,23 +47,101 @@ codex plugin add clean-architecture@clean-architecture-skills
 codex plugin add kent-beck-style@clean-architecture-skills
 ```
 
-Start a new Codex session after installation. You can also browse the configured marketplace with `/plugins` in Codex CLI.
+Start a new Codex session. Use `/plugins` to browse the marketplace. For the IDE extension or a version without `codex plugin`, use [manual installation](#manual-installation).
 
-For the Codex IDE extension, or a Codex version without `codex plugin`, use manual installation below.
+**Using another agent?** Jump to [pi](#pi), [OpenClaw](#openclaw), [GitHub Copilot / Amp](#github-copilot-and-amp), or [manual installation](#manual-installation).
 
-### pi
+## Usage
 
-Install both skills as one pi package:
+After installation, ask your agent to use a skill in a regular prompt:
+
+```text
+Use clean-architecture to review the dependencies in src/domain.
+Point out violations and explain why each boundary matters.
+```
+
+```text
+Use kent-beck-style to review this module.
+Suggest small refactorings that preserve behavior and make the intent clearer.
+```
+
+For a combined review:
+
+```text
+Review this feature with clean-architecture and kent-beck-style.
+Check the dependency direction, then suggest the smallest changes
+that would make the code easier to understand and maintain.
+```
+
+You can also ask for a new feature design, review YAGNI and KISS, improve names, or refactor a long method.
+
+<details>
+<summary><strong>Explicit skill selection in Codex and pi</strong></summary>
+
+In Codex, open `/skills` or mention an installed plugin skill directly:
+
+```text
+$clean-architecture:clean-architecture Review the dependencies in src/domain.
+$kent-beck-style:kent-beck-style Review this module for code smells and small refactorings.
+```
+
+In pi, invoke `/skill:clean-architecture` or `/skill:kent-beck-style`.
+
+</details>
+
+## Supported agents
+
+| Agent | Installation |
+| --- | --- |
+| **Claude Code** | [Native plugin marketplace](#quick-start) |
+| **OpenAI Codex** | [Native plugin marketplace](#quick-start) or [shared skills directory](#manual-installation) |
+| **pi** | [Git package](#pi) |
+| **OpenClaw** | [Skills CLI](#openclaw) |
+| **GitHub Copilot** | [GitHub CLI](#github-copilot-and-amp) or [shared skills directory](#manual-installation) |
+| **Amp** | [GitHub CLI](#github-copilot-and-amp) or [shared skills directory](#manual-installation) |
+| **Cursor** | [Local skills directory](#manual-installation) |
+| **Gemini CLI** | [Local skills directory](#manual-installation) |
+| **OpenCode** | [Local skills directory](#manual-installation) |
+
+Choose one installation method per agent to avoid duplicate skills.
+
+<a id="pi"></a>
+<details>
+<summary><strong>pi</strong> — install as a Git package</summary>
 
 ```bash
 pi install git:github.com/nathankim0/clean-architecture-skills
 ```
 
-Run `/reload` in an active pi session, then invoke `/skill:clean-architecture` or `/skill:kent-beck-style`. Run `pi list` to check installed packages. To install a local clone instead, run `pi install .` from the repository root.
+Run `/reload` in an active session, then invoke `/skill:clean-architecture` or `/skill:kent-beck-style`. Check installed packages with `pi list`.
 
-### GitHub Copilot and Amp
+To install a local clone instead, run `pi install .` from the repository root.
 
-From the Git repository where you want to use the skills, choose the command for your tool:
+</details>
+
+<a id="openclaw"></a>
+<details>
+<summary><strong>OpenClaw</strong> — install with the Skills CLI</summary>
+
+Clone the repository and install either or both skills on the machine running your OpenClaw Gateway:
+
+```bash
+git clone https://github.com/nathankim0/clean-architecture-skills.git
+cd clean-architecture-skills
+openclaw skills install ./plugins/clean-architecture/skills/clean-architecture --global
+openclaw skills install ./plugins/kent-beck-style/skills/kent-beck-style --global
+openclaw skills list --eligible
+```
+
+Start a new session after installation. The installer copies the skill folders; after `git pull`, repeat the install commands with `--force` to update them.
+
+</details>
+
+<a id="github-copilot-and-amp"></a>
+<details>
+<summary><strong>GitHub Copilot / Amp</strong> — install with GitHub CLI</summary>
+
+From the Git repository where you want to use the skills, choose the command for your agent:
 
 ```bash
 # GitHub Copilot
@@ -96,380 +151,107 @@ gh skill install nathankim0/clean-architecture-skills --all --agent github-copil
 gh skill install nathankim0/clean-architecture-skills --all --agent amp --scope project
 ```
 
-Both commands install into `.agents/skills/`, so one installation covers both tools in the same project. Check the installed skills with `gh skill list --scope project`, then start a new Copilot or Amp session and ask it to use `clean-architecture` or `kent-beck-style` for a review.
+Both commands install into `.agents/skills/`, so one installation covers both agents in the same project. Check with `gh skill list --scope project`, then start a new session and ask your agent to use `clean-architecture` or `kent-beck-style`.
 
-You can also check discovery in each configured client with `copilot skill list` or `amp skill list`.
+Use `copilot skill list` or `amp skill list` to check discovery in each configured client.
 
-Commit the installed `.agents/skills/` folders to the target repository to make them available to Copilot cloud agent and Copilot code review. For a personal installation, use `--scope user` instead. If your GitHub CLI does not include `gh skill`, use the manual installation below.
+For Copilot cloud agent and Copilot code review, commit the installed `.agents/skills/` folders to the target repository. For a personal installation, replace `--scope project` with `--scope user`.
 
-### Manual Installation
+If your GitHub CLI does not include `gh skill`, use [manual installation](#manual-installation).
 
-Clone the repository:
+</details>
+
+<a id="manual-installation"></a>
+<details>
+<summary><strong>Manual installation</strong> — shared directory and other agents</summary>
+
+Clone the repository, then link either or both skills into `~/.agents/skills/`. Codex, GitHub Copilot, Amp, and pi can discover this shared directory.
+
+The commands below use a macOS or Linux shell:
 
 ```bash
 git clone https://github.com/nathankim0/clean-architecture-skills.git
 cd clean-architecture-skills
-```
-
-#### OpenClaw
-
-From the cloned repository, install either or both skills into OpenClaw's shared managed skill directory:
-
-```bash
-openclaw skills install ./plugins/clean-architecture/skills/clean-architecture --global
-openclaw skills install ./plugins/kent-beck-style/skills/kent-beck-style --global
-openclaw skills list --eligible
-```
-
-Run these commands on the machine running your OpenClaw Gateway. Start a new session after installation. These commands copy the skill folders; after `git pull`, repeat the install commands with `--force` to update the copies.
-
-#### Shared Agent Skills Directory
-
-For Codex, GitHub Copilot, Amp, pi, and other tools that discover `~/.agents/skills/`, symlink either or both skill folders into that directory:
-
-```bash
 mkdir -p ~/.agents/skills
 ln -s "$PWD/plugins/clean-architecture/skills/clean-architecture" ~/.agents/skills/
 ln -s "$PWD/plugins/kent-beck-style/skills/kent-beck-style" ~/.agents/skills/
 ```
 
-To make the skills available only in one project, use that project's `.agents/skills/` directory instead of `~/.agents/skills/`. Reload or restart your assistant if the skills do not appear. Choose one installation method per tool to avoid duplicate skills.
+For project-only use, link or copy the skill folders into the target project's `.agents/skills/` instead. On Windows, copy the folders into your agent's skills directory, or create directory links using your shell's equivalent commands.
 
-OpenClaw also discovers the shared user directory when using its default state directory. For a custom state directory, use the OpenClaw installer above.
+Reload or restart your agent if the skills do not appear. Keep the clone at the same path so the links remain valid. Run `git pull` to update linked skills; copied folders must be copied again after updates. If a skill is already installed, move the old folder aside before creating its link.
 
-Run `git pull` in this clone to update linked skills. Keep the clone at the same path so the links remain valid. If you previously copied a skill, move that installed folder aside before creating its link.
+For other agents, link or copy the **individual skill folders containing `SKILL.md`** into the appropriate directory:
 
-For other assistants, link or copy the same skill folders into the directory listed below.
+| Agent | Skills directory |
+| --- | --- |
+| Cursor | `.cursor/skills/` in the target project |
+| Gemini CLI | `~/.gemini/skills/` |
+| OpenCode | `~/.config/opencode/skills/` |
+| OpenClaw | `~/.openclaw/skills/` (default shared managed directory) |
+| pi | `~/.pi/agent/skills/` |
+| GitHub Copilot | `.agents/skills/` (project) or `~/.copilot/skills/` (personal) |
+| Amp | `.agents/skills/` (project) or `~/.config/agents/skills/` (personal) |
 
-### Other AI Assistants
+OpenClaw also discovers `~/.agents/skills/` with its default state directory. For a custom state directory, use its [Skills CLI](#openclaw).
 
-| Assistant | Skill Directory |
-|---|---|
-| **Cursor** | `.cursor/skills/` |
-| **Gemini CLI** | `~/.gemini/skills/` |
-| **OpenCode** | `~/.config/opencode/skills/` |
-| **OpenClaw** | `~/.openclaw/skills/` (default shared managed directory) |
-| **pi** | `~/.pi/agent/skills/` |
-| **GitHub Copilot** | `.agents/skills/` (project) or `~/.copilot/skills/` (personal) |
-| **Amp** | `.agents/skills/` (project) or `~/.config/agents/skills/` (personal) |
+</details>
 
----
+## The approach
 
-## Usage
-
-The skills are designed to work naturally from regular prompts.
-
-In Codex, select a skill with `/skills` or mention it explicitly:
-
-```text
-$clean-architecture:clean-architecture Review the dependencies in src/domain.
-$kent-beck-style:kent-beck-style Review this module for code smells and small refactorings.
-```
-
-### Review an Entire Project
-
-```text
-Review this project using clean architecture principles.
-```
-
-### Review a Specific Module
-
-```text
-Check the dependencies in src/domain and identify any clean architecture violations.
-```
-
-### Design a New Feature
-
-```text
-Design user authentication using clean architecture.
-```
-
-### Review Code Smells
-
-```text
-Review this code for code smells and suggest refactorings.
-```
-
-### Refactor Existing Code
-
-```text
-Help me refactor this long method using Kent Beck's approach.
-```
-
-### Review for Simplicity
-
-```text
-Check whether this implementation follows YAGNI and KISS.
-```
-
-### Improve Naming
-
-```text
-Improve the naming and readability of this module.
-```
-
-### Use Both Skills Together
-
-```text
-Review this feature for clean architecture violations, then suggest small refactorings to simplify the implementation.
-```
-
----
-
-## Clean Architecture
-
-### The Dependency Rule
-
-The central rule of Clean Architecture is:
-
-> Source code dependencies must point inward, toward higher-level policies.
+**Keep business rules independent.** Source-code dependencies point inward, toward higher-level policies:
 
 ```mermaid
 flowchart LR
     accTitle: Clean Architecture dependency direction
-    accDescr: Source code dependencies point inward from Frameworks and Drivers through Interface Adapters and Use Cases to Entities.
-    frameworks["Frameworks & Drivers<br/>Web, database, external services"] --> adapters["Interface Adapters<br/>Controllers, presenters, gateways"]
-    adapters --> usecases["Use Cases<br/>Application business rules"]
-    usecases --> entities["Entities<br/>Enterprise business rules"]
+    accDescr: Source-code dependencies point inward from Frameworks and Drivers through Interface Adapters and Use Cases to Entities.
+    frameworks["Frameworks & Drivers"] --> adapters["Interface Adapters"]
+    adapters --> usecases["Use Cases"]
+    usecases --> entities["Entities"]
 ```
 
-Arrows show source-code dependencies from outer implementation details toward inner business rules. Dependencies may skip layers while keeping this direction.
+Dependencies can skip layers while keeping this direction. Folder names alone do not determine the architecture.
 
-Business rules should not depend on databases, frameworks, UI libraries, or external APIs.
+**Improve code in small steps.** Follow Kent Beck's simple design priorities: pass the tests, reveal intention, avoid duplication, and keep unnecessary elements out. Use abstractions when they solve a real problem.
 
-Instead, implementation details depend on abstractions defined closer to the business rules.
-
-### Layer Responsibilities
-
-| Layer | Responsibility | Examples |
-|---|---|---|
-| **Entities** | Enterprise business rules | `User`, `Order`, `Product` |
-| **Use Cases** | Application-specific business rules | `CreateOrder`, `GetUserProfile` |
-| **Interface Adapters** | Transform data between layers | Controllers, Presenters, Gateways |
-| **Frameworks & Drivers** | External implementation details | React, Express, PostgreSQL |
-
-### SOLID Principles
-
-| Principle | Description |
-|---|---|
-| **SRP** — Single Responsibility | A module should have one reason to change |
-| **OCP** — Open/Closed | Open for extension, closed for modification |
-| **LSP** — Liskov Substitution | Subtypes must be substitutable for their base types |
-| **ISP** — Interface Segregation | Don't depend on interfaces you don't use |
-| **DIP** — Dependency Inversion | Depend on abstractions, not concrete implementations |
-
----
-
-## Kent Beck Style
-
-The Kent Beck skill focuses less on introducing architecture and more on making existing code **simpler, clearer, and easier to change**.
-
-### Simple Design
-
-Prefer code that:
-
-1. Passes the tests
-2. Reveals intention
-3. Avoids duplication
-4. Has the fewest unnecessary elements
-
-The skill also applies principles such as:
-
-- **YAGNI** — Don't build functionality before it is needed
-- **KISS** — Prefer the simplest design that solves the current problem
-- **Small Steps** — Refactor incrementally
-- **Behavior Preservation** — Improve structure without changing behavior
-- **Intention-Revealing Names** — Make the code explain itself
-
-### Code Smells
-
-The skill can identify common categories of code smells, including:
-
-- Bloaters
-- Object-Orientation Abusers
-- Change Preventers
-- Dispensables
-- Couplers
-
-It then recommends targeted refactorings instead of broad rewrites.
-
----
-
-## Example Project Structure
-
-A typical Clean Architecture project might look like this:
-
-```text
-src/
-├── domain/                         # Entities
-│   ├── entities/
-│   │   ├── User.ts
-│   │   └── Order.ts
-│   └── value-objects/
-│       └── Email.ts
-│
-├── application/                    # Use Cases
-│   ├── use-cases/
-│   │   ├── CreateOrderUseCase.ts
-│   │   └── GetUserUseCase.ts
-│   └── ports/
-│       ├── input/
-│       │   └── CreateOrderInput.ts
-│       └── output/
-│           └── UserRepository.ts
-│
-├── adapters/                       # Interface Adapters
-│   ├── controllers/
-│   │   └── OrderController.ts
-│   ├── presenters/
-│   │   └── UserPresenter.ts
-│   └── gateways/
-│       └── UserRepositoryImpl.ts
-│
-└── infrastructure/                 # Frameworks & Drivers
-    ├── database/
-    │   └── PostgresConnection.ts
-    ├── web/
-    │   └── ExpressServer.ts
-    └── external/
-        └── PaymentGateway.ts
-```
-
-This is an example, not a required directory structure.
-
-Clean Architecture is primarily about **dependency direction and separation of policy from implementation details**, not specific folder names.
-
----
-
-## Repository Structure
-
-```text
-clean-architecture-skills/
-├── .github/workflows/validate.yml   # Linux and Windows checks
-│
-├── .agents/
-│   └── plugins/
-│       └── marketplace.json        # Codex marketplace
-│
-├── .claude-plugin/
-│   └── marketplace.json            # Claude Code marketplace
-│
-├── plugins/
-│   ├── clean-architecture/
-│   │   ├── .claude-plugin/
-│   │   │   └── plugin.json
-│   │   ├── .codex-plugin/
-│   │   │   └── plugin.json
-│   │   └── skills/
-│   │       └── clean-architecture/
-│   │           └── SKILL.md
-│   │
-│   └── kent-beck-style/
-│       ├── .claude-plugin/
-│       │   └── plugin.json
-│       ├── .codex-plugin/
-│       │   └── plugin.json
-│       └── skills/
-│           └── kent-beck-style/
-│               └── SKILL.md
-│
-├── tests/validation.test.mjs        # Metadata and executable example checks
-├── package.json                    # pi package skill paths
-├── README.md
-├── README.ko.md
-└── LICENSE
-```
-
-Keep each plugin's `.claude-plugin/plugin.json` and `.codex-plugin/plugin.json` identical. Both are regular JSON files so installation also works when Git symlinks are disabled. Both hosts use the same skill instructions under `skills/`. Marketplace catalogs remain separate because their schemas differ.
-
-Run `node --test` with Node.js 24 or later to check manifest consistency and the executable skill examples. GitHub Actions runs these checks on Linux and Windows.
-
----
-
-## Philosophy
-
-These skills are not intended to enforce architecture mechanically.
-
-The goal is to help AI coding agents reason about questions such as:
-
-- Is business logic coupled to infrastructure?
-- Are dependencies pointing in the right direction?
-- Is an abstraction actually useful?
-- Is this design more complicated than the problem requires?
-- Can this code be improved through a small refactoring instead of a rewrite?
-- Does the code clearly communicate its intent?
-
-**Good architecture should make software easier to understand, change, test, and maintain — not merely add more layers.**
-
----
+The [Clean Architecture skill](plugins/clean-architecture/skills/clean-architecture/SKILL.md) and [Kent Beck Style skill](plugins/kent-beck-style/skills/kent-beck-style/SKILL.md) contain the full review checklists, report formats, and TypeScript, Python, and Java/Kotlin examples.
 
 ## Contributing
 
-Contributions are welcome.
+Issues and pull requests are welcome, especially concrete review examples, clearer guidance, and verified agent installation fixes.
 
-1. Fork the repository
-2. Create a feature branch
+- Edit the shared instructions in `plugins/<name>/skills/<name>/SKILL.md`.
+- Keep each plugin's `.claude-plugin/plugin.json` and `.codex-plugin/plugin.json` identical and as regular JSON files. The marketplace catalogs stay separate because their schemas differ.
+- Keep the English and Korean READMEs in sync.
 
-```bash
-git checkout -b feature/amazing-feature
-```
-
-3. Commit your changes
+Run the checks with **Node.js 24 or later**; no dependencies need to be installed:
 
 ```bash
-git commit -m "Add amazing feature"
+node --test
 ```
 
-4. Push the branch
-
-```bash
-git push origin feature/amazing-feature
-```
-
-5. Open a Pull Request
-
----
+GitHub Actions checks plugin metadata and executable skill examples on Linux and Windows.
 
 ## References
 
-### Clean Architecture
-
 - [The Clean Architecture — Robert C. Martin](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
-- [Clean Architecture: A Craftsman's Guide to Software Structure and Design](https://www.amazon.com/Clean-Architecture-Craftsmans-Software-Structure/dp/0134494164)
-
-### Refactoring & Simple Design
-
-- [Refactoring — Martin Fowler](https://refactoring.com/)
-- [Refactoring Catalog](https://refactoring.com/catalog/)
+- [Refactoring and the Refactoring Catalog — Martin Fowler](https://refactoring.com/)
 - [Implementation Patterns — Kent Beck](https://www.amazon.com/Implementation-Patterns-Kent-Beck/dp/0321413091)
-- [Code Smells — Refactoring.Guru](https://refactoring.guru/refactoring/smells)
 
-### Claude Code
+<details>
+<summary><strong>Official agent documentation</strong></summary>
 
-- [Claude Code Plugin Marketplaces](https://code.claude.com/docs/en/plugin-marketplaces)
+| Agent | Documentation |
+| --- | --- |
+| Claude Code | [Plugin marketplaces](https://code.claude.com/docs/en/plugin-marketplaces) |
+| OpenAI Codex | [Skills](https://developers.openai.com/codex/skills/) · [Plugin packaging](https://developers.openai.com/plugins/build/plugins) |
+| pi | [Skills](https://pi.dev/docs/latest/skills) · [Packages](https://pi.dev/docs/latest/packages) |
+| OpenClaw | [Skills](https://docs.openclaw.ai/tools/skills) · [Skills CLI](https://docs.openclaw.ai/cli/skills) |
+| GitHub Copilot | [Agent Skills](https://docs.github.com/en/copilot/concepts/agents/about-agent-skills) · [GitHub CLI installation](https://cli.github.com/manual/gh_skill_install) |
+| Amp | [Skills](https://ampcode.com/docs/customize/skills) |
 
-### OpenAI Codex
-
-- [OpenAI Codex Skills](https://developers.openai.com/codex/skills/)
-- [OpenAI Plugin Packaging and Marketplaces](https://developers.openai.com/plugins/build/plugins)
-
-### OpenClaw and pi
-
-- [OpenClaw Skills](https://docs.openclaw.ai/tools/skills)
-- [OpenClaw Skills CLI](https://docs.openclaw.ai/cli/skills)
-- [pi Skills](https://pi.dev/docs/latest/skills)
-- [pi Packages](https://pi.dev/docs/latest/packages)
-
-### GitHub Copilot and Amp
-
-- [GitHub Copilot Agent Skills](https://docs.github.com/en/copilot/concepts/agents/about-agent-skills)
-- [GitHub CLI Skill Installation](https://cli.github.com/manual/gh_skill_install)
-- [Amp Skills](https://ampcode.com/docs/customize/skills)
-
----
+</details>
 
 ## License
 
-MIT License.
-
-Free to use, modify, and distribute.
+[MIT](LICENSE) — use, modify, and share.
