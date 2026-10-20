@@ -13,6 +13,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v7
+      - name: Restore symbolic links on Windows
+        if: runner.os == 'Windows'
+        run: git -c core.symlinks=true checkout-index --force --all
       - uses: actions/setup-node@v7
         with:
           node-version: '24'

@@ -49,6 +49,8 @@ codex plugin add kent-beck-style@clean-architecture-skills
 
 Start a new Codex session. Use `/plugins` to browse the marketplace. For the IDE extension or a version without `codex plugin`, use [manual installation](#manual-installation).
 
+Windows plugin installs require [Git symlink support](https://gitforwindows.org/symbolic-links): enable Developer Mode or symlink privileges and clone with `core.symlinks=true`. If symlinks are unavailable, use manual skill-directory installation.
+
 **Using another agent?** Jump to [pi](#pi), [OpenClaw](#openclaw), [GitHub Copilot / Amp](#github-copilot-and-amp), or [manual installation](#manual-installation).
 
 ## Usage
@@ -221,7 +223,7 @@ The [Clean Architecture skill](plugins/clean-architecture/skills/clean-architect
 Issues and pull requests are welcome, especially concrete review examples, clearer guidance, and verified agent installation fixes.
 
 - Edit the shared instructions in `plugins/<name>/skills/<name>/SKILL.md`.
-- Keep each plugin's `.claude-plugin/plugin.json` and `.codex-plugin/plugin.json` identical and as regular JSON files. The marketplace catalogs stay separate because their schemas differ.
+- Edit each plugin's `.codex-plugin/plugin.json` as the single manifest source. `.claude-plugin/plugin.json` is a relative symlink to it. The marketplace catalogs stay separate because their schemas differ.
 - Keep the English and Korean READMEs in sync.
 
 Run the checks with **Node.js 24 or later**; no dependencies need to be installed:

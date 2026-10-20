@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { globSync, lstatSync, readFileSync } from 'node:fs';
+import { globSync, lstatSync, readFileSync, readlinkSync, realpathSync } from 'node:fs';
 import { stripTypeScriptTypes } from 'node:module';
 import test from 'node:test';
 
@@ -38,12 +38,14 @@ test('pi package discovers both skills from their existing directories', () => {
 });
 
 for (const plugin of marketplace.plugins) {
-  test(`${plugin.name} ships matching regular manifests and a discoverable skill`, () => {
+  test(`${plugin.name} shares one manifest through a relative link and exposes its skill`, () => {
     const folder = plugin.source.slice(2);
     const claudePath = `${folder}/.claude-plugin/plugin.json`;
     const codexPath = `${folder}/.codex-plugin/plugin.json`;
-    assert.ok(lstatSync(new URL(claudePath, root)).isFile(), 'Claude manifest must not be a symlink');
-    assert.ok(lstatSync(new URL(codexPath, root)).isFile(), 'Codex manifest must not be a symlink');
+    assert.ok(lstatSync(new URL(claudePath, root)).isSymbolicLink());
+    assert.equal(readlinkSync(new URL(claudePath, root)).replaceAll('\\', '/'), '../.codex-plugin/plugin.json');
+    assert.equal(realpathSync(new URL(claudePath, root)), realpathSync(new URL(codexPath, root)));
+    assert.ok(lstatSync(new URL(codexPath, root)).isFile(), 'Codex manifest is the canonical file');
     const manifest = json(codexPath);
     assert.deepEqual(json(claudePath), manifest);
     assert.equal(manifest.name, plugin.name);

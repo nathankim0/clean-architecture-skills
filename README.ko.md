@@ -51,6 +51,8 @@ codex plugin add kent-beck-style@clean-architecture-skills
 
 설치 후 새 Codex 세션을 시작합니다. `/plugins`로 마켓플레이스를 탐색할 수 있습니다. IDE 확장이나 `codex plugin` 명령이 없는 버전에서는 [수동 설치](#manual-installation)를 사용하세요.
 
+Windows 플러그인 설치에는 [Git 심볼릭 링크 지원](https://gitforwindows.org/symbolic-links)이 필요합니다. 개발자 모드나 링크 생성 권한을 활성화하고 `core.symlinks=true`로 복제하세요. 링크를 사용할 수 없다면 스킬 디렉터리에 수동으로 설치합니다.
+
 **다른 도구를 사용하나요?** [pi](#pi), [OpenClaw](#openclaw), [GitHub Copilot / Amp](#github-copilot-and-amp), [수동 설치](#manual-installation)로 바로 이동하세요.
 
 <a id="usage"></a>
@@ -226,7 +228,7 @@ flowchart LR
 이슈와 PR을 환영합니다. 구체적인 리뷰 예시, 더 명확한 지침, 검증한 도구별 설치 방법을 제안해 주세요.
 
 - 공통 지침은 `plugins/<name>/skills/<name>/SKILL.md`에서 수정합니다.
-- 각 플러그인의 `.claude-plugin/plugin.json`과 `.codex-plugin/plugin.json`을 동일한 일반 JSON 파일로 유지합니다. 마켓플레이스 목록은 스키마가 달라 별도로 관리합니다.
+- 각 플러그인의 `.codex-plugin/plugin.json`만 수정합니다. `.claude-plugin/plugin.json`은 이 원본을 가리키는 상대 심볼릭 링크입니다. 마켓플레이스 목록은 스키마가 달라 별도로 관리합니다.
 - 영문·한글 README를 함께 갱신합니다.
 
 **Node.js 24 이상**에서 검증합니다. 별도로 설치할 의존성은 없습니다.

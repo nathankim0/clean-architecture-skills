@@ -1,9 +1,1 @@
-{
-  "name": "clean-architecture",
-  "description": "Review and design code using Clean Architecture, the Dependency Rule, layer boundaries, and SOLID principles.",
-  "version": "1.1.1",
-  "author": {
-    "name": "nathankim0"
-  },
-  "skills": "./skills/"
-}
+../.codex-plugin/plugin.json
