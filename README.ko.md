@@ -8,6 +8,8 @@
 
 **Claude Code**와 **OpenAI Codex**의 플러그인 마켓플레이스, **pi**의 Git 패키지 설치, **OpenClaw**의 스킬 설치 명령을 지원합니다. 로컬 스킬 디렉터리를 사용하는 다른 AI 코딩 도구에서도 같은 `SKILL.md` 파일을 사용할 수 있습니다.
 
+**GitHub Copilot**과 **Amp**에서는 GitHub CLI로 두 스킬을 설치하거나 공통 Agent Skills 디렉터리에서 불러올 수 있습니다.
+
 ## 포함된 스킬
 
 ### 클린 아키텍처
@@ -82,6 +84,24 @@ pi install git:github.com/nathankim0/clean-architecture-skills
 
 실행 중인 pi 세션에서 `/reload`를 실행한 뒤 `/skill:clean-architecture` 또는 `/skill:kent-beck-style`로 호출합니다. `pi list`로 설치한 패키지를 확인할 수 있습니다. 로컬 복제본을 설치하려면 저장소 루트에서 `pi install .`을 실행합니다.
 
+### GitHub Copilot과 Amp
+
+스킬을 사용할 Git 저장소에서 도구에 맞는 명령을 선택해 실행합니다.
+
+```bash
+# GitHub Copilot
+gh skill install nathankim0/clean-architecture-skills --all --agent github-copilot --scope project
+
+# Amp
+gh skill install nathankim0/clean-architecture-skills --all --agent amp --scope project
+```
+
+두 명령 모두 `.agents/skills/`에 설치하므로 같은 프로젝트에서는 한 번 설치한 스킬을 두 도구가 함께 사용할 수 있습니다. `gh skill list --scope project`로 설치한 스킬을 확인한 뒤, Copilot이나 Amp에서 새 세션을 시작하고 `clean-architecture` 또는 `kent-beck-style`을 사용해 검토하도록 요청합니다.
+
+설정한 클라이언트에서 `copilot skill list` 또는 `amp skill list`로 실제 스킬 인식 여부도 확인할 수 있습니다.
+
+Copilot cloud agent와 Copilot code review에서도 사용하려면 설치한 `.agents/skills/` 폴더를 대상 저장소에 커밋합니다. 개인용으로 설치하려면 `--scope project` 대신 `--scope user`를 사용합니다. GitHub CLI에 `gh skill` 명령이 없다면 아래 수동 설치 방법을 사용합니다.
+
 ### 수동 설치
 
 저장소를 복제합니다.
@@ -105,7 +125,7 @@ OpenClaw Gateway가 실행되는 컴퓨터에서 명령을 실행합니다. 설�
 
 #### 공통 Agent Skills 디렉터리
 
-Codex, pi 등 `~/.agents/skills/`를 탐색하는 도구에서는 원하는 스킬 폴더를 해당 디렉터리에 심볼릭 링크로 연결합니다.
+Codex, GitHub Copilot, Amp, pi 등 `~/.agents/skills/`를 탐색하는 도구에서는 원하는 스킬 폴더를 해당 디렉터리에 심볼릭 링크로 연결합니다.
 
 ```bash
 mkdir -p ~/.agents/skills
@@ -130,6 +150,8 @@ OpenClaw도 기본 상태 디렉터리를 사용할 때는 이 공통 사용자 
 | **OpenCode** | `~/.config/opencode/skills/` |
 | **OpenClaw** | `~/.openclaw/skills/` (기본 공용 관리 디렉터리) |
 | **pi** | `~/.pi/agent/skills/` |
+| **GitHub Copilot** | `.agents/skills/` (프로젝트) 또는 `~/.copilot/skills/` (개인) |
+| **Amp** | `.agents/skills/` (프로젝트) 또는 `~/.config/agents/skills/` (개인) |
 
 ---
 
@@ -437,6 +459,12 @@ git push origin feature/amazing-feature
 - [OpenClaw 스킬 CLI](https://docs.openclaw.ai/cli/skills)
 - [pi 스킬](https://pi.dev/docs/latest/skills)
 - [pi 패키지](https://pi.dev/docs/latest/packages)
+
+### GitHub Copilot과 Amp
+
+- [GitHub Copilot Agent Skills](https://docs.github.com/en/copilot/concepts/agents/about-agent-skills)
+- [GitHub CLI 스킬 설치](https://cli.github.com/manual/gh_skill_install)
+- [Amp 스킬](https://ampcode.com/docs/customize/skills)
 
 ---
 

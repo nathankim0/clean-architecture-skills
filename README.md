@@ -8,6 +8,8 @@ A collection of skills for AI coding agents that provide code review, architectu
 
 Supports **Claude Code** and **OpenAI Codex** with native plugin marketplaces, **pi** as a Git package, and **OpenClaw** through its skill installer. The same `SKILL.md` files also work with AI coding assistants that use local skill directories.
 
+**GitHub Copilot** and **Amp** can install both skills with GitHub CLI or discover them in a shared Agent Skills directory.
+
 ## What's Included
 
 ### Clean Architecture
@@ -82,6 +84,24 @@ pi install git:github.com/nathankim0/clean-architecture-skills
 
 Run `/reload` in an active pi session, then invoke `/skill:clean-architecture` or `/skill:kent-beck-style`. Run `pi list` to check installed packages. To install a local clone instead, run `pi install .` from the repository root.
 
+### GitHub Copilot and Amp
+
+From the Git repository where you want to use the skills, choose the command for your tool:
+
+```bash
+# GitHub Copilot
+gh skill install nathankim0/clean-architecture-skills --all --agent github-copilot --scope project
+
+# Amp
+gh skill install nathankim0/clean-architecture-skills --all --agent amp --scope project
+```
+
+Both commands install into `.agents/skills/`, so one installation covers both tools in the same project. Check the installed skills with `gh skill list --scope project`, then start a new Copilot or Amp session and ask it to use `clean-architecture` or `kent-beck-style` for a review.
+
+You can also check discovery in each configured client with `copilot skill list` or `amp skill list`.
+
+Commit the installed `.agents/skills/` folders to the target repository to make them available to Copilot cloud agent and Copilot code review. For a personal installation, use `--scope user` instead. If your GitHub CLI does not include `gh skill`, use the manual installation below.
+
 ### Manual Installation
 
 Clone the repository:
@@ -105,7 +125,7 @@ Run these commands on the machine running your OpenClaw Gateway. Start a new ses
 
 #### Shared Agent Skills Directory
 
-For Codex, pi, and other tools that discover `~/.agents/skills/`, symlink either or both skill folders into that directory:
+For Codex, GitHub Copilot, Amp, pi, and other tools that discover `~/.agents/skills/`, symlink either or both skill folders into that directory:
 
 ```bash
 mkdir -p ~/.agents/skills
@@ -130,6 +150,8 @@ For other assistants, link or copy the same skill folders into the directory lis
 | **OpenCode** | `~/.config/opencode/skills/` |
 | **OpenClaw** | `~/.openclaw/skills/` (default shared managed directory) |
 | **pi** | `~/.pi/agent/skills/` |
+| **GitHub Copilot** | `.agents/skills/` (project) or `~/.copilot/skills/` (personal) |
+| **Amp** | `.agents/skills/` (project) or `~/.config/agents/skills/` (personal) |
 
 ---
 
@@ -437,6 +459,12 @@ git push origin feature/amazing-feature
 - [OpenClaw Skills CLI](https://docs.openclaw.ai/cli/skills)
 - [pi Skills](https://pi.dev/docs/latest/skills)
 - [pi Packages](https://pi.dev/docs/latest/packages)
+
+### GitHub Copilot and Amp
+
+- [GitHub Copilot Agent Skills](https://docs.github.com/en/copilot/concepts/agents/about-agent-skills)
+- [GitHub CLI Skill Installation](https://cli.github.com/manual/gh_skill_install)
+- [Amp Skills](https://ampcode.com/docs/customize/skills)
 
 ---
 
