@@ -6,20 +6,20 @@
   },
   "metadata": {
     "description": "Clean Architecture and Kent Beck refactoring skills for code review, architecture design, and simple design.",
-    "version": "1.1.0"
+    "version": "1.2.0"
   },
   "plugins": [
     {
       "name": "clean-architecture",
       "source": "./plugins/clean-architecture",
       "description": "Review and design code using Clean Architecture, the Dependency Rule, layer boundaries, and SOLID principles.",
-      "version": "1.0.0"
+      "version": "1.1.0"
     },
     {
       "name": "kent-beck-style",
       "source": "./plugins/kent-beck-style",
       "description": "Review and refactor code using Kent Beck's simple design principles, code smell detection, and incremental improvements.",
-      "version": "1.0.0"
+      "version": "1.1.0"
     }
   ]
 }
