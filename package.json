@@ -1,0 +1,12 @@
+{
+  "name": "clean-architecture-skills",
+  "version": "1.3.0",
+  "private": true,
+  "license": "MIT",
+  "pi": {
+    "skills": [
+      "./plugins/clean-architecture/skills",
+      "./plugins/kent-beck-style/skills"
+    ]
+  }
+}

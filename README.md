@@ -6,7 +6,7 @@
 
 A collection of skills for AI coding agents that provide code review, architecture guidance, and refactoring suggestions based on **Clean Architecture** and **Kent Beck's simple design philosophy**.
 
-Supports **Claude Code** and **OpenAI Codex** with native plugin marketplaces. The same `SKILL.md` files also work with AI coding assistants that use local skill directories.
+Supports **Claude Code** and **OpenAI Codex** with native plugin marketplaces, **pi** as a Git package, and **OpenClaw** through its skill installer. The same `SKILL.md` files also work with AI coding assistants that use local skill directories.
 
 ## What's Included
 
@@ -72,6 +72,16 @@ Start a new Codex session after installation. You can also browse the configured
 
 For the Codex IDE extension, or a Codex version without `codex plugin`, use manual installation below.
 
+### pi
+
+Install both skills as one pi package:
+
+```bash
+pi install git:github.com/nathankim0/clean-architecture-skills
+```
+
+Run `/reload` in an active pi session, then invoke `/skill:clean-architecture` or `/skill:kent-beck-style`. Run `pi list` to check installed packages. To install a local clone instead, run `pi install .` from the repository root.
+
 ### Manual Installation
 
 Clone the repository:
@@ -81,7 +91,21 @@ git clone https://github.com/nathankim0/clean-architecture-skills.git
 cd clean-architecture-skills
 ```
 
-For Codex, symlink either or both skill folders into your user skill directory:
+#### OpenClaw
+
+From the cloned repository, install either or both skills into OpenClaw's shared managed skill directory:
+
+```bash
+openclaw skills install ./plugins/clean-architecture/skills/clean-architecture --global
+openclaw skills install ./plugins/kent-beck-style/skills/kent-beck-style --global
+openclaw skills list --eligible
+```
+
+Run these commands on the machine running your OpenClaw Gateway. Start a new session after installation. These commands copy the skill folders; after `git pull`, repeat the install commands with `--force` to update the copies.
+
+#### Shared Agent Skills Directory
+
+For Codex, pi, and other tools that discover `~/.agents/skills/`, symlink either or both skill folders into that directory:
 
 ```bash
 mkdir -p ~/.agents/skills
@@ -89,7 +113,9 @@ ln -s "$PWD/plugins/clean-architecture/skills/clean-architecture" ~/.agents/skil
 ln -s "$PWD/plugins/kent-beck-style/skills/kent-beck-style" ~/.agents/skills/
 ```
 
-To make the skills available only in one project, use that project's `.agents/skills/` directory instead of `~/.agents/skills/`. If the skills do not appear, restart Codex. Choose either plugin or manual installation to avoid duplicate skills.
+To make the skills available only in one project, use that project's `.agents/skills/` directory instead of `~/.agents/skills/`. Reload or restart your assistant if the skills do not appear. Choose one installation method per tool to avoid duplicate skills.
+
+OpenClaw also discovers the shared user directory when using its default state directory. For a custom state directory, use the OpenClaw installer above.
 
 Run `git pull` in this clone to update linked skills. Keep the clone at the same path so the links remain valid. If you previously copied a skill, move that installed folder aside before creating its link.
 
@@ -102,6 +128,8 @@ For other assistants, link or copy the same skill folders into the directory lis
 | **Cursor** | `.cursor/skills/` |
 | **Gemini CLI** | `~/.gemini/skills/` |
 | **OpenCode** | `~/.config/opencode/skills/` |
+| **OpenClaw** | `~/.openclaw/skills/` (default shared managed directory) |
+| **pi** | `~/.pi/agent/skills/` |
 
 ---
 
@@ -324,6 +352,7 @@ clean-architecture-skills/
 │               └── SKILL.md
 │
 ├── tests/validation.test.mjs        # Metadata and executable example checks
+├── package.json                    # pi package skill paths
 ├── README.md
 ├── README.ko.md
 └── LICENSE
@@ -401,6 +430,13 @@ git push origin feature/amazing-feature
 
 - [OpenAI Codex Skills](https://developers.openai.com/codex/skills/)
 - [OpenAI Plugin Packaging and Marketplaces](https://developers.openai.com/plugins/build/plugins)
+
+### OpenClaw and pi
+
+- [OpenClaw Skills](https://docs.openclaw.ai/tools/skills)
+- [OpenClaw Skills CLI](https://docs.openclaw.ai/cli/skills)
+- [pi Skills](https://pi.dev/docs/latest/skills)
+- [pi Packages](https://pi.dev/docs/latest/packages)
 
 ---
 

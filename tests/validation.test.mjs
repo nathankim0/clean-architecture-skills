@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { lstatSync, readFileSync } from 'node:fs';
+import { globSync, lstatSync, readFileSync } from 'node:fs';
 import { stripTypeScriptTypes } from 'node:module';
 import test from 'node:test';
 
@@ -27,6 +27,16 @@ test('marketplace catalogs expose the same unique plugins', () => {
   assert.equal(new Set(names(marketplace)).size, marketplace.plugins.length);
 });
 
+test('pi package discovers both skills from their existing directories', () => {
+  const pkg = json('package.json');
+  assert.equal(pkg.name, marketplace.name);
+  assert.equal(pkg.version, marketplace.metadata.version);
+  const skills = pkg.pi.skills.flatMap((directory) =>
+    globSync('**/SKILL.md', { cwd: new URL(`${directory}/`, root) }).map((file) =>
+      read(`${directory}/${file}`).match(/^name: (.+)$/m)[1].trim()));
+  assert.deepEqual(skills.sort(), ['clean-architecture', 'kent-beck-style']);
+});
+
 for (const plugin of marketplace.plugins) {
   test(`${plugin.name} ships matching regular manifests and a discoverable skill`, () => {
     const folder = plugin.source.slice(2);
@@ -37,6 +47,8 @@ for (const plugin of marketplace.plugins) {
     const manifest = json(codexPath);
     assert.deepEqual(json(claudePath), manifest);
     assert.equal(manifest.name, plugin.name);
+    assert.match(manifest.name, /^[a-z0-9]+(-[a-z0-9]+)*$/);
+    assert.ok(manifest.name.length <= 64);
     assert.equal(manifest.version, plugin.version);
     assert.equal(manifest.description, plugin.description);
     assert.match(manifest.version, /^\d+\.\d+\.\d+$/);

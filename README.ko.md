@@ -6,7 +6,7 @@
 
 **클린 아키텍처**와 **켄트 벡의 단순한 설계 철학**에 따라 코드 리뷰, 아키텍처 설계 가이드, 리팩터링 제안을 제공하는 AI 코딩 에이전트용 스킬 모음입니다.
 
-**Claude Code**와 **OpenAI Codex**의 플러그인 마켓플레이스를 지원합니다. 로컬 스킬 디렉터리를 사용하는 다른 AI 코딩 도구에서도 같은 `SKILL.md` 파일을 사용할 수 있습니다.
+**Claude Code**와 **OpenAI Codex**의 플러그인 마켓플레이스, **pi**의 Git 패키지 설치, **OpenClaw**의 스킬 설치 명령을 지원합니다. 로컬 스킬 디렉터리를 사용하는 다른 AI 코딩 도구에서도 같은 `SKILL.md` 파일을 사용할 수 있습니다.
 
 ## 포함된 스킬
 
@@ -72,6 +72,16 @@ codex plugin add kent-beck-style@clean-architecture-skills
 
 Codex IDE 확장이나 `codex plugin` 명령이 없는 버전에서는 아래 수동 설치 방법을 사용합니다.
 
+### pi
+
+두 스킬을 하나의 pi 패키지로 설치합니다.
+
+```bash
+pi install git:github.com/nathankim0/clean-architecture-skills
+```
+
+실행 중인 pi 세션에서 `/reload`를 실행한 뒤 `/skill:clean-architecture` 또는 `/skill:kent-beck-style`로 호출합니다. `pi list`로 설치한 패키지를 확인할 수 있습니다. 로컬 복제본을 설치하려면 저장소 루트에서 `pi install .`을 실행합니다.
+
 ### 수동 설치
 
 저장소를 복제합니다.
@@ -81,7 +91,21 @@ git clone https://github.com/nathankim0/clean-architecture-skills.git
 cd clean-architecture-skills
 ```
 
-Codex의 사용자 스킬 디렉터리에 원하는 스킬 폴더를 심볼릭 링크로 연결합니다.
+#### OpenClaw
+
+복제한 저장소에서 원하는 스킬을 OpenClaw의 공용 관리 스킬 디렉터리에 설치합니다.
+
+```bash
+openclaw skills install ./plugins/clean-architecture/skills/clean-architecture --global
+openclaw skills install ./plugins/kent-beck-style/skills/kent-beck-style --global
+openclaw skills list --eligible
+```
+
+OpenClaw Gateway가 실행되는 컴퓨터에서 명령을 실행합니다. 설치 후 새 세션을 시작합니다. 이 명령은 스킬 폴더를 복사하므로, `git pull`로 갱신한 뒤에는 설치 명령에 `--force`를 붙여 다시 실행합니다.
+
+#### 공통 Agent Skills 디렉터리
+
+Codex, pi 등 `~/.agents/skills/`를 탐색하는 도구에서는 원하는 스킬 폴더를 해당 디렉터리에 심볼릭 링크로 연결합니다.
 
 ```bash
 mkdir -p ~/.agents/skills
@@ -89,7 +113,9 @@ ln -s "$PWD/plugins/clean-architecture/skills/clean-architecture" ~/.agents/skil
 ln -s "$PWD/plugins/kent-beck-style/skills/kent-beck-style" ~/.agents/skills/
 ```
 
-특정 프로젝트에서만 사용하려면 `~/.agents/skills/` 대신 해당 프로젝트의 `.agents/skills/` 디렉터리를 사용합니다. 스킬이 표시되지 않으면 Codex를 다시 시작합니다. 중복 등록을 피하려면 플러그인 설치와 수동 설치 중 하나를 선택합니다.
+특정 프로젝트에서만 사용하려면 `~/.agents/skills/` 대신 해당 프로젝트의 `.agents/skills/` 디렉터리를 사용합니다. 스킬이 표시되지 않으면 사용하는 도구에서 다시 불러오거나 새 세션을 시작합니다. 중복 등록을 피하려면 도구마다 설치 방법을 하나만 선택합니다.
+
+OpenClaw도 기본 상태 디렉터리를 사용할 때는 이 공통 사용자 디렉터리를 탐색합니다. 상태 디렉터리를 변경했다면 위의 OpenClaw 설치 명령을 사용합니다.
 
 연결한 스킬은 이 복제본에서 `git pull`을 실행하면 함께 갱신됩니다. 링크가 유지되도록 복제본의 경로를 그대로 둡니다. 이전에 스킬을 복사해 설치했다면 기존 설치 폴더를 다른 위치로 옮긴 뒤 링크를 만듭니다.
 
@@ -102,6 +128,8 @@ ln -s "$PWD/plugins/kent-beck-style/skills/kent-beck-style" ~/.agents/skills/
 | **Cursor** | `.cursor/skills/` |
 | **Gemini CLI** | `~/.gemini/skills/` |
 | **OpenCode** | `~/.config/opencode/skills/` |
+| **OpenClaw** | `~/.openclaw/skills/` (기본 공용 관리 디렉터리) |
+| **pi** | `~/.pi/agent/skills/` |
 
 ---
 
@@ -324,6 +352,7 @@ clean-architecture-skills/
 │               └── SKILL.md
 │
 ├── tests/validation.test.mjs        # 메타데이터와 실행 가능한 예제 검증
+├── package.json                    # pi 패키지의 스킬 경로
 ├── README.md
 ├── README.ko.md
 └── LICENSE
@@ -401,6 +430,13 @@ git push origin feature/amazing-feature
 
 - [OpenAI Codex 스킬](https://developers.openai.com/codex/skills/)
 - [OpenAI 플러그인 패키징과 마켓플레이스](https://developers.openai.com/plugins/build/plugins)
+
+### OpenClaw와 pi
+
+- [OpenClaw 스킬](https://docs.openclaw.ai/tools/skills)
+- [OpenClaw 스킬 CLI](https://docs.openclaw.ai/cli/skills)
+- [pi 스킬](https://pi.dev/docs/latest/skills)
+- [pi 패키지](https://pi.dev/docs/latest/packages)
 
 ---
 
