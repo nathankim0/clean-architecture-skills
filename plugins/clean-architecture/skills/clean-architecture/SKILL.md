@@ -215,6 +215,25 @@ A fake backend, in-memory store, or mock SDK is an outer-layer implementation of
 
 Reset, seed, and time-travel operations used only in development or staging do not belong on the production port; otherwise every real implementation must implement them (ISP). Expose them as a separate optional capability that the composition root provides only in those environments.
 
+#### 3-5. One Owner for Shared State
+
+When several screens or components show data from the same port, one owner (a provider, store, or cache in the adapter layer) holds the repository instance and its state, and the others subscribe to it.
+
+Symptoms of missing ownership:
+- Each consumer creates its own repository instance, loader, or timer
+- The same request is sent once per consumer
+- After a mutation on one screen, another screen keeps showing stale values until it reloads
+
+Centralize refresh triggers (focus, app resume, schedule boundaries, after mutations) in the owner and coalesce concurrent loads into one request. Keep timers that exist only for display, such as a ticking countdown, inside the component that displays them so the shared state does not re-render every subscriber.
+
+#### 3-6. Do Not Guess Adapter Contracts
+
+If the real backend contract (API spec, GraphQL schema, SDK callback) does not exist yet, do not write a "real" adapter against an invented contract, and do not bypass generated types or hand-edit schemas to make it compile.
+
+- Keep the port and the fake adapter; the port shape comes from what the inner layer needs, not from a guessed server response
+- Write the expected contract down for the backend team: operations, fields, error cases, idempotency keys
+- Add the real adapter when the contract is published, and swap it in at the composition root
+
 ### 4. SOLID Principles Review
 
 Object-oriented design principles used in Clean Architecture implementation. **DIP** is essential for Crossing Boundaries.
@@ -232,12 +251,16 @@ Object-oriented design principles used in Clean Architecture implementation. **D
 Do not rely on folder names. List what each layer actually imports with the project's search tools, for example:
 
 ```bash
-# Inner layers must not mention outer modules or the composition root
-rg -n "Container|Module\.provide|Repository(Impl)?\b" src/domain
-rg -n "AppContainer|Module\.provide" src/presentation src/ui
-# Fakes must be referenced only by the composition root
+# Inner layers must not reference implementations, frameworks, or the composition root.
+# Port interfaces such as `UserRepository` are expected in the domain, so search for
+# implementation names and wiring instead of the word "Repository".
+rg -n "Impl\b|Container|Module\.provide" src/domain
+rg -n "Impl\b|AppContainer|Module\.provide" src/presentation src/ui
+# Fakes must be referenced only by adapters and the composition root
 rg -n "Fake|Mock" src --glob '!src/data/**' --glob '!src/di/**'
 ```
+
+Adjust module names to the project's conventions, then read each hit: a match is a lead, not a verdict.
 
 Report each violation with the file and line, the inner module, the outer module it reaches, and the boundary that fixes it.
 
