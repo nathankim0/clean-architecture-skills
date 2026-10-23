@@ -86,6 +86,16 @@ Every change in this repository ends with a published release. Do not stop at a 
    https://github.com/nathankim0/clean-architecture-skills/compare/vPREV...vX.Y.Z
    ```
 
-6. Report the commit hash, tag, and release URL.
+6. Refresh the README badges. GitHub serves README images through its camo cache, so the release badge can keep showing the previous version for a few minutes. Purge every camo image on the repository page, then confirm the release badge shows the new tag:
+
+   ```bash
+   for u in $(curl -s https://github.com/nathankim0/clean-architecture-skills \
+       | grep -o 'https://camo.githubusercontent.com/[^"\\]*' | sort -u); do
+     curl -s -o /dev/null -w "%{http_code} $u\n" -X PURGE "$u"
+   done
+   curl -s "https://img.shields.io/github/v/release/nathankim0/clean-architecture-skills" | grep -o "vX\.Y\.Z"
+   ```
+
+7. Report the commit hash, tag, release URL, and the badge check result.
 
 If a step fails (tests, push, or release), fix the cause and retry; do not skip the tag or release.
