@@ -16,6 +16,10 @@ English · [한국어](README.ko.md)
 
 </div>
 
+> [!IMPORTANT]
+> **Architecture matters more, not less, when AI writes the code.**
+> AI agents produce code faster than anyone can review it, and they copy whatever structure they find. Clear boundaries tell an agent where a change belongs, keep its mistakes inside one layer, and let you swap a fake for a real backend by editing one file. Without them, every prompt adds a shortcut that the next prompt repeats.
+
 ## Skills
 
 | Skill | What it helps with |
