@@ -86,7 +86,7 @@ Every change in this repository ends with a published release. Do not stop at a 
    https://github.com/nathankim0/clean-architecture-skills/compare/vPREV...vX.Y.Z
    ```
 
-6. Refresh the README badges. GitHub serves README images through its camo cache, so the release badge can keep showing the previous version for a few minutes. Purge every camo image on the repository page, then confirm the release badge shows the new tag:
+6. Refresh the README badges. GitHub serves README images through its camo cache, and shields.io's CDN caches the badge for about 5 minutes (measured: the badge flipped 286 seconds after a release). A purge right after the release just re-caches the old badge, so wait about 5 minutes after `gh release create`, then purge every camo image on the repository page and confirm the release badge shows the new tag:
 
    ```bash
    for u in $(curl -s https://github.com/nathankim0/clean-architecture-skills \
